@@ -61,7 +61,7 @@ public class LongestPathGUI extends JFrame {
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         controlPanel.setBackground(new Color(236, 240, 241));
 
-        String[] mazes = {"4x4 Simple", "6x6 Open Room", "8x8 Complex Maze"};
+        String[] mazes = {"4x4 Simple", "6x6 Open Room", "10x10 Stress Test", "25x25 Complex Maze"};
         mazeSelector = new JComboBox<>(mazes);
         mazeSelector.addActionListener(e -> loadSelectedMaze());
 
@@ -97,19 +97,19 @@ public class LongestPathGUI extends JFrame {
     }
 
     // --- Hardcoded Mazes for Easy Demonstration ---
-    private void loadSelectedMaze() {
+private void loadSelectedMaze() {
         stopSimulation();
         int index = mazeSelector.getSelectedIndex();
         
         String[] mapData;
-        if (index == 0) {
+        if (index == 0) { // 4x4 Simple
             mapData = new String[] {
                 "....",
                 ".###",
                 "....",
                 "...."
             };
-        } else if (index == 1) {
+        } else if (index == 1) { // 6x6 Open Room
             mapData = new String[] {
                 "......",
                 ".##...",
@@ -118,16 +118,46 @@ public class LongestPathGUI extends JFrame {
                 ".#....",
                 "......"
             };
-        } else {
+        } else if (index == 2) { // 10x10 Stress Test (Open space is hard for NP-Hard)
             mapData = new String[] {
-                "........",
-                ".##..#..",
-                ".....#..",
-                "..#..#..",
-                "..#.....",
-                "..####..",
-                "........",
-                "........"
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                ".........."
+            };
+        } else { // 25x25 Complex Maze (Corridors make it solveable)
+            mapData = new String[] {
+                ".........................",
+                ".#######################.",
+                ".......................#.",
+                ".#####################.#.",
+                ".#.....................#.",
+                ".#.#####################.",
+                ".#.#.....................",
+                ".#.#.###################.",
+                ".#.#.#.................#.",
+                ".#.#.#.###############.#.",
+                ".#.#.#.#...............#.",
+                ".#.#.#.#.#############.#.",
+                ".#.#.#.#.#...........#.#.",
+                ".#.#.#.#.#.#########.#.#.",
+                ".#.#.#.#.#.#.......#.#.#.",
+                ".#.#.#.#.#.#.#####.#.#.#.",
+                ".#.#.#.#.#.#.#...#.#.#.#.",
+                ".#.#.#.#.#.#.#.#.#.#.#.#.",
+                ".#.#.#.#.#.#.#...#.#.#.#.",
+                ".#.#.#.#.#.#.#####.#.#.#.",
+                ".........................",
+                "#######################..",
+                ".........................",
+                ".........................",
+                "........................."
             };
         }
 
@@ -143,14 +173,16 @@ public class LongestPathGUI extends JFrame {
             }
         }
 
+        // Reset all path data
         bestLength = 0;
         bestPath.clear();
         currentPath.clear();
         visited = new boolean[rows][cols];
         
-        bestLengthLabel.setText("🏆 Best Route Found: 0");
-        currentLengthLabel.setText("🤖 Current Search Depth: 0");
-        mazePanel.repaint();
+        // Update UI Labels safely
+        if (bestLengthLabel != null) bestLengthLabel.setText("🏆 Best Route Found: 0");
+        if (currentLengthLabel != null) currentLengthLabel.setText("🤖 Current Search Depth: 0");
+        if (mazePanel != null) mazePanel.repaint();
     }
 
     private void toggleSimulation(ActionEvent e) {
