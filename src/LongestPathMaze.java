@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class LongestPathMaze {
 
-    // Step 2: Data structures for backtracking
+    // step 2: data structures for backtracking
     static char[][] grid;
     static boolean[][] visited;
     static int rows, cols;
@@ -14,7 +14,7 @@ public class LongestPathMaze {
     static ArrayList<int[]> bestPath = new ArrayList<>();
     static int totalOpenCells = 0;
 
-    // Direction arrays for Up, Down, Left, Right
+    // direction arrays for up, down, left, right
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
 
@@ -24,66 +24,66 @@ public class LongestPathMaze {
             return;
         }
 
-        // Step 1: Maze representation (Read from file)
+        // step 1: maze representation (read from file)
         if (!loadMaze(args[0])) return;
 
-        // Step 5: Run from every open cell
+        // step 5: run from every open cell
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if (grid[r][c] == '.') {
-                    visited = new boolean[rows][cols]; // Reset visited for new start
+                    visited = new boolean[rows][cols]; // reset visited for new start
                     ArrayList<int[]> currentPath = new ArrayList<>();
                     
-                    // Mark starting cell
+                    // mark starting cell
                     visited[r][c] = true;
                     currentPath.add(new int[]{r, c});
                     
-                    // Start DFS (length starts at 1, remaining unvisited drops by 1)
+                    // start dfs (length starts at 1, remaining unvisited drops by 1)
                     dfs(r, c, 1, currentPath, totalOpenCells - 1);
                 }
             }
         }
 
-        // Step 6: Output
+        // step 6: output
         System.out.println("Longest path length: " + bestLength);
         printBestPath();
     }
 
-    // Step 3: Backtracking function
+    // step 3: backtracking function
     static void dfs(int x, int y, int length, ArrayList<int[]> currentPath, int remainingUnvisited) {
-        // Update best if length > bestLength
+        // update best if length > bestLength
         if (length > bestLength) {
             bestLength = length;
-            bestPath = new ArrayList<>(currentPath); // Deep copy the path
+            bestPath = new ArrayList<>(currentPath); // deep copy the path
         }
 
-        // Step 4: Pruning
+        // step 4: pruning
         if (length + remainingUnvisited <= bestLength) {
-            return; // Skip this branch, it can never beat the current best
+            return; // skip this branch, it can never beat the current best
         }
 
-        // For each neighbor (up, down, left, right)
+        // for each neighbor (up, down, left, right)
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            // If inside bounds, open, and not visited:
+            // if inside bounds, open, and not visited:
             if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && grid[nx][ny] == '.' && !visited[nx][ny]) {
-                // Mark visited, add to currentPath
+                // mark visited, add to currentPath
                 visited[nx][ny] = true;
                 currentPath.add(new int[]{nx, ny});
                 
-                // Recurse
+                // recurse
                 dfs(nx, ny, length + 1, currentPath, remainingUnvisited - 1);
                 
-                // Backtrack
+                // backtrack
                 currentPath.remove(currentPath.size() - 1);
                 visited[nx][ny] = false;
             }
         }
     }
 
-    // Helper: Loads the maze from a text file
+    // helper: loads the maze from a text file
     static boolean loadMaze(String filename) {
         try {
             ArrayList<String> lines = new ArrayList<>();
@@ -113,25 +113,25 @@ public class LongestPathMaze {
         }
     }
 
-    // Helper: Prints the grid with the longest path marked as '*'
+    // helper: prints the grid with the longest path marked as '*'
     static void printBestPath() {
         char[][] visualGrid = new char[rows][cols];
         
-        // Copy original grid
+        // copy original grid
         for(int r = 0; r < rows; r++) {
             for(int c = 0; c < cols; c++) {
                 visualGrid[r][c] = grid[r][c];
             }
         }
 
-        // Mark the path
+        // mark the path
         for (int i = 0; i < bestPath.size(); i++) {
             int[] pos = bestPath.get(i);
             int r = pos[0];
             int c = pos[1];
-            if (i == 0) visualGrid[r][c] = 'S'; // Start
-            else if (i == bestPath.size() - 1) visualGrid[r][c] = 'E'; // End
-            else visualGrid[r][c] = '*'; // Path
+            if (i == 0) visualGrid[r][c] = 'S'; // start
+            else if (i == bestPath.size() - 1) visualGrid[r][c] = 'E'; // end
+            else visualGrid[r][c] = '*'; // path
         }
 
         System.out.println("Grid Visualization:");

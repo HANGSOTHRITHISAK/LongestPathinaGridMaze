@@ -37,7 +37,7 @@ public class SnakeAI extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Header Panel (Scoreboard)
+        // header panel (scoreboard)
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(10, 20, 10));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -57,7 +57,7 @@ public class SnakeAI extends JFrame {
         gamePanel = new GamePanel();
         add(gamePanel, BorderLayout.CENTER);
 
-        // Control Panel
+        // control panel
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         controls.setBackground(new Color(30, 35, 30));
 
@@ -139,7 +139,7 @@ public class SnakeAI extends JFrame {
         
         solverThread = new Thread(() -> {
             try {
-                // Find a single valid start point (the snake's tail)
+                // find a single valid start point (the snake's tail)
                 int startR = -1, startC = -1;
                 for(int r=0; r<rows; r++) {
                     for(int c=0; c<cols; c++) {
@@ -153,7 +153,7 @@ public class SnakeAI extends JFrame {
                 visited[startR][startC] = true;
                 currentPath.add(new int[]{startR, startC});
 
-                // Run Backtracking from ONE point to avoid the "Stuck" issue
+                // run backtracking from one point to avoid the "stuck" issue
                 dfs(startR, startC, 1, totalOpenCells - 1);
                 
                 SwingUtilities.invokeLater(() -> statusLabel.setText("STATUS: FINISHED"));
@@ -175,7 +175,7 @@ public class SnakeAI extends JFrame {
     private void dfs(int r, int c, int length, int remaining) throws InterruptedException {
         if (!isRunning) return;
 
-        // UI Update
+        // ui update
         SwingUtilities.invokeLater(() -> {
             if (length > bestLength) {
                 bestLength = length;
@@ -188,7 +188,7 @@ public class SnakeAI extends JFrame {
 
         if (animationDelay > 0) Thread.sleep(animationDelay);
 
-        // Pruning
+        // pruning
         if (length + remaining <= bestLength) return;
 
         for (int i=0; i<4; i++) {
@@ -217,11 +217,11 @@ public class SnakeAI extends JFrame {
             int sx = (getWidth() - cols*size)/2;
             int sy = (getHeight() - rows*size)/2;
 
-            // Draw Board
+            // draw board
             g2d.setColor(new Color(20, 30, 20));
             g2d.fillRect(sx, sy, cols*size, rows*size);
 
-            // Draw obstacles
+            // draw obstacles
             for (int r=0; r<rows; r++) {
                 for (int c=0; c<cols; c++) {
                     if (grid[r][c] == '#') {
@@ -231,20 +231,20 @@ public class SnakeAI extends JFrame {
                 }
             }
 
-            // Draw the Apple (Food)
+            // draw the apple (food)
             g2d.setColor(new Color(255, 50, 50));
             g2d.fillOval(sx + foodCoord[1]*size + 4, sy + foodCoord[0]*size + 4, size - 8, size - 8);
-            g2d.setColor(new Color(50, 255, 50)); // Leaf
+            g2d.setColor(new Color(50, 255, 50)); // leaf
             g2d.fillRect(sx + foodCoord[1]*size + size/2, sy + foodCoord[0]*size + 2, 3, 5);
 
-            // Draw Winning Path (The Full Snake)
+            // draw winning path (the full snake)
             if (!bestPath.isEmpty()) {
                 g2d.setColor(new Color(0, 200, 0, 80));
                 g2d.setStroke(new BasicStroke(size * 0.8f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                 drawPath(g2d, bestPath, sx, sy, size);
             }
 
-            // Draw AI "Thinking" Snake
+            // draw ai "thinking" snake
             if (!currentPath.isEmpty()) {
                 g2d.setColor(new Color(100, 255, 100));
                 g2d.setStroke(new BasicStroke(size * 0.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));

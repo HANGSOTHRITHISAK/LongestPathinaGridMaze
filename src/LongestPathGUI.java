@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LongestPathGUI extends JFrame {
 
-    // --- Core Algorithm Variables ---
+    // --- core algorithm variables ---
     private char[][] grid;
     private int rows, cols;
     private int totalOpenCells;
@@ -16,12 +16,12 @@ public class LongestPathGUI extends JFrame {
     private List<int[]> bestPath = new ArrayList<>();
     private boolean[][] visited;
     
-    // --- Threading & Control ---
+    // --- threading & control ---
     private Thread solverThread;
     private volatile boolean isRunning = false;
-    private int animationDelay = 50; // Milliseconds
+    private int animationDelay = 50; // milliseconds
 
-    // --- UI Components ---
+    // --- ui components ---
     private MazePanel mazePanel;
     private JLabel statusLabel;
     private JLabel bestLengthLabel;
@@ -30,7 +30,7 @@ public class LongestPathGUI extends JFrame {
     private JComboBox<String> mazeSelector;
     private JButton startBtn;
 
-    // Direction arrays for Up, Down, Left, Right
+    // direction arrays for up, down, left, right
     private final int[] dRow = {-1, 1, 0, 0};
     private final int[] dCol = {0, 0, -1, 1};
 
@@ -41,7 +41,7 @@ public class LongestPathGUI extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // 1. Top Status Panel
+        // 1. top status panel
         JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topPanel.setBackground(new Color(40, 44, 52));
         topPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
@@ -53,11 +53,11 @@ public class LongestPathGUI extends JFrame {
         topPanel.add(currentLengthLabel);
         add(topPanel, BorderLayout.NORTH);
 
-        // 2. Center Maze Panel
+        // 2. center maze panel
         mazePanel = new MazePanel();
         add(mazePanel, BorderLayout.CENTER);
 
-        // 3. Bottom Control Panel
+        // 3. bottom control panel
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         controlPanel.setBackground(new Color(236, 240, 241));
 
@@ -85,7 +85,7 @@ public class LongestPathGUI extends JFrame {
 
         add(controlPanel, BorderLayout.SOUTH);
 
-        // Initialize first maze
+        // initialize first maze
         loadSelectedMaze();
     }
 
@@ -96,20 +96,20 @@ public class LongestPathGUI extends JFrame {
         return label;
     }
 
-    // --- Hardcoded Mazes for Easy Demonstration ---
+    // --- hardcoded mazes for easy demonstration ---
 private void loadSelectedMaze() {
         stopSimulation();
         int index = mazeSelector.getSelectedIndex();
         
         String[] mapData;
-        if (index == 0) { // 4x4 Simple
+        if (index == 0) { // 4x4 simple
             mapData = new String[] {
                 "....",
                 ".###",
                 "....",
                 "...."
             };
-        } else if (index == 1) { // 6x6 Open Room
+        } else if (index == 1) { // 6x6 open room
             mapData = new String[] {
                 "......",
                 ".##...",
@@ -118,7 +118,7 @@ private void loadSelectedMaze() {
                 ".#....",
                 "......"
             };
-        } else if (index == 2) { // 10x10 Stress Test (Open space is hard for NP-Hard)
+        } else if (index == 2) { // 10x10 stress test (open space is hard for np-hard)
             mapData = new String[] {
                 "..........",
                 "..........",
@@ -131,7 +131,7 @@ private void loadSelectedMaze() {
                 "..........",
                 ".........."
             };
-        } else { // 25x25 Complex Maze (Corridors make it solveable)
+        } else { // 25x25 complex maze (corridors make it solveable)
             mapData = new String[] {
                 ".........................",
                 ".#######################.",
@@ -173,13 +173,13 @@ private void loadSelectedMaze() {
             }
         }
 
-        // Reset all path data
+        // reset all path data
         bestLength = 0;
         bestPath.clear();
         currentPath.clear();
         visited = new boolean[rows][cols];
         
-        // Update UI Labels safely
+        // update ui labels safely
         if (bestLengthLabel != null) bestLengthLabel.setText("🏆 Best Route Found: 0");
         if (currentLengthLabel != null) currentLengthLabel.setText("🤖 Current Search Depth: 0");
         if (mazePanel != null) mazePanel.repaint();
@@ -195,14 +195,14 @@ private void loadSelectedMaze() {
 
     private void startSimulation() {
         startBtn.setText("⏹ Stop Simulation");
-        startBtn.setBackground(new Color(231, 76, 60)); // Red
+        startBtn.setBackground(new Color(231, 76, 60)); // red
         isRunning = true;
         bestLength = 0;
         bestPath.clear();
         
         solverThread = new Thread(() -> {
             try {
-                // Run DFS from every possible open cell
+                // run dfs from every possible open cell
                 for (int r = 0; r < rows && isRunning; r++) {
                     for (int c = 0; c < cols && isRunning; c++) {
                         if (grid[r][c] == '.') {
@@ -227,7 +227,7 @@ private void loadSelectedMaze() {
                 isRunning = false;
                 
             } catch (InterruptedException ex) {
-                // Thread interrupted
+                // thread interrupted
             }
         });
         solverThread.start();
