@@ -1,9 +1,6 @@
 # Snake AI: NP-Hard Longest Path Solver
 ### An Autonomous Routing & Area Coverage Simulator
 
-![Snake AI Simulation Screen](https://raw.githubusercontent.com/YOUR_USERNAME/LongestPathinaGridMaze/main/screenshot.png)
-*(Note: Replace the URL above with the actual link to your screenshot once uploaded to GitHub)*
-
 ## 📖 Project Description
 This project investigates the **Longest Simple Path problem** in a grid-based maze. While finding the shortest path between two points is computationally efficient (using BFS or Dijkstra's), determining the longest non-self-intersecting path is **NP-Hard**. 
 
@@ -33,4 +30,15 @@ Ensure you have the **Java Development Kit (JDK)** installed.
 1. **Navigate to the source folder:**
    ```bash
    cd src
+2. **Compile the application:**
+   ```bash
+   javac SnakeAI.java
+1. **Launch the Simulation:**
+   ```bash
+   java SnakeAI
 
+
+## 📖 Project Description
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009). Introduction to Algorithms (3rd ed.). MIT Press.
+
+Sipser, M. (2013). Introduction to the Theory of Computation (3rd ed.). Cengage Learning.
